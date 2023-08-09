@@ -20,3 +20,4 @@ class ProjectsAdmin(admin.ModelAdmin):
 @admin.register(Issue)
 class IssuesAdmin(admin.ModelAdmin):
     pass
+
