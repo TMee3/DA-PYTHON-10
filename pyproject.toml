@@ -9,13 +9,21 @@ readme = "README.md"
 python = "^3.10"
 django = "^4.2.4"
 pillow = "^10.0.0"
-flake8 = "^6.1.0"
-flake8-html = "^0.4.3"
 djangorestframework = "^3.14.0"
 djangorestframework-simplejwt = "^5.2.2"
 django-rest-framework-nested = "^0.0.1"
 
+[tool.poetry.group.dev.dependencies]
+flake8 = "^6.1.0"
+flake8-html = "^0.4.3"
+
+[tool.flake8]
+exclude = "env/"
+max-line-length = 119
+format = "html"
+htmldir = "flake-report"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
