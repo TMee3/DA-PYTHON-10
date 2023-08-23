@@ -1,7 +1,11 @@
+from rest_framework import generics, status
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.generics import CreateAPIView
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.permissions import IsAuthenticated, BasePermission, SAFE_METHODS
+from rest_framework import viewsets
+from django.contrib.auth.models import User
 from .models import Project, Contributor, Issue, Comment
 from .serializers import (
     ProjectSerializer, ProjectSerializerFull, ContributorSerializer,
@@ -12,6 +16,10 @@ from .permissions import (
     CanAccessContributorComments, CanAccessContributors,
     CanManageContributorsPermission, IsAuthorOrReadOnly
 )
+
+class UserViewSet(generics.CreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UsersSerializer
 
 # Pagination standard pour les vues
 class StandardResultsSetPagination(PageNumberPagination):
