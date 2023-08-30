@@ -31,7 +31,7 @@ class ProjectSerializerFull(ProjectSerializer):
     contributors = ContributorSerializer(many=True, read_only=True)
 
     class Meta(ProjectSerializer.Meta):
-        fields = ProjectSerializer.Meta.fields + ['description', 'type', 'author', 'issues', 'contributors']
+        fields = ProjectSerializer.Meta.fields + ['description', 'project_type', 'author', 'issues', 'contributors']
 
 class UsersSerializer(serializers.ModelSerializer):
     class Meta:

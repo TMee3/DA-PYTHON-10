@@ -45,12 +45,7 @@ class IsAuthorOrReadOnly(permissions.BasePermission):
             return True
         return obj.author == request.user
 
-class IsOwner(permissions.BasePermission):
-    """
-    Assurez-vous que l'utilisateur est le propriétaire de l'objet.
-    """
-    def has_object_permission(self, request, view, obj):
-        return obj.owner == request.user
+
 
 class IsContributor(permissions.BasePermission):
     """
@@ -76,3 +71,15 @@ class CanCommentOnIssue(permissions.BasePermission):
         issue_id = request.data.get('issue')
         issue = Issue.objects.get(id=issue_id)
         return issue.project.contributors.filter(user=request.user).exists()
+
+class IsOwner(permissions.BasePermission):
+    """
+    Assurez-vous que l'utilisateur est le propriétaire de l'objet.
+    """
+    def has_object_permission(self, request, view, obj):
+        if isinstance(obj, Project):
+            return obj.author == request.user
+        elif isinstance(obj, Issue):
+            return obj.user == request.user
+        # Ajoutez d'autres cas selon vos modèles
+        return False  # Par défaut, l'accès est refusé
