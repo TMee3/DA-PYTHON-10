@@ -33,7 +33,7 @@ end
 # Unset irrelevant variables.
 deactivate nondestructive
 
-set -gx VIRTUAL_ENV "/Users/theopidoux/Desktop/OCR_Projet_10-master 2/env"
+set -gx VIRTUAL_ENV "/Users/theopidoux/Downloads/SoftDesk-main 2/softdesk/env"
 
 set -gx _OLD_VIRTUAL_PATH $PATH
 set -gx PATH "$VIRTUAL_ENV/bin" $PATH

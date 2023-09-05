@@ -38,7 +38,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="/Users/theopidoux/Desktop/OCR_Projet_10-master 2/env"
+VIRTUAL_ENV="/Users/theopidoux/Downloads/SoftDesk-main 2/softdesk/env"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"
