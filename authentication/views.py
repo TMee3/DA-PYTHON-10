@@ -14,9 +14,6 @@ class UserCreate(generics.CreateAPIView):
     queryset = User.objects.all()  # Récupération de tous les utilisateurs (non utilisé ici)
     serializer_class = UserSerializer  # Utilisation du sérialiseur pour la création d'utilisateurs
 
-    def perform_create(self, serializer):
-        """Sauvegarde de l'utilisateur nouvellement créé."""
-        serializer.save()
 
     
 
@@ -25,9 +22,6 @@ class UserDelete(generics.DestroyAPIView):
 
     def delete(self, request, *args, **kwargs):
         user = request.user
-        if user.is_authenticated:  # Check if the user is authenticated
-            user.delete()
-            # reutrn a success message if the user is deleted
-            return Response({"message": "User deleted successfully"}, status=status.HTTP_200_OK)
-        else:
-            return Response(status=status.HTTP_401_UNAUTHORIZED)
+        user.delete()
+        return Response({"message": "Votre compte a bien été supprimé."}, status=status.HTTP_200_OK)
+

@@ -4,4 +4,4 @@ from django.contrib.auth.models import User
 class Consent(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     date_given = models.DateTimeField(auto_now_add=True)
-    # Ajoutez d'autres champs pertinents pour votre cas
+
