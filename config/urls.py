@@ -21,7 +21,6 @@ urlpatterns = [
     path('signup/', UserViewSet.as_view(), name='users'),
     path('login/', TokenObtainPairView.as_view(), name='obtain_tokens'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='refresh_tokens'),
-    path('gdpr-deactivate/', gdpr_deactivate.as_view(), name='gdpr-deactivate'),
     path('', include(router.urls)),
     
     

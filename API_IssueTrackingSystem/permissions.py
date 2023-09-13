@@ -28,14 +28,6 @@ class IsContributor(BasePermission):
         return False
 
 
-class IsAuthorOrReadOnly(BasePermission):
-    message = "The user is not the author of the object."
-
-    def has_object_permission(self, request, view, obj):
-        if request.method in ['PUT', 'PATCH', 'DELETE']:
-            return obj.author == request.user
-        return True
-
 class IsAuthorOrReadOnly(permissions.BasePermission):
     """
     Custom permission to only allow authors of a project to edit it.
