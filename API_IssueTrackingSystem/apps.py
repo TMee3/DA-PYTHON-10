@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class AuthenticationConfig(AppConfig):
+class ApiIssuetrackingsystemConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'authentication'
+    name = 'API_IssueTrackingSystem'
