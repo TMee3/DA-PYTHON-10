@@ -13,12 +13,11 @@ from API_IssueTrackingSystem.serializers import ProjectSerializer, ProjectSerial
 
 
 class ProjectViewSet(ModelViewSet):
-    """Viewset to handle CRUD operations for projects."""
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
     serializer_class_full = ProjectSerializerFull
 
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsContributor, IsAuthorOrReadOnly]
 
     def get_serializer_class(self):
         if self.action == 'retrieve':
@@ -32,7 +31,6 @@ class ProjectViewSet(ModelViewSet):
 
 
 class ContributorViewSet(ModelViewSet):
-    """Viewset to handle CRUD operations for project contributors."""
     serializer_class = ContributorSerializer
     permissions_classes = [IsAuthenticated, IsContributor, IsAuthorOrReadOnly]
 
@@ -42,7 +40,6 @@ class ContributorViewSet(ModelViewSet):
 
 
 class IssueViewSet(ModelViewSet):
-    """Viewset to handle CRUD operations for project issues."""
     serializer_class = IssueSerializer
     permissions_classes = [IsAuthenticated, IsContributor, IsAuthorOrReadOnly]
 
@@ -52,25 +49,21 @@ class IssueViewSet(ModelViewSet):
 
 
 class CommentViewSet(ModelViewSet):
-    """Viewset to handle CRUD operations for issue comments."""
-    permission_classes = [IsAuthenticated]
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
     
 
 
 class UserViewSet(generics.CreateAPIView):
-    """View to handle user creation."""
     queryset = User.objects.all()
     serializer_class = UsersSerializer
 
 
 # class gdpr_deactivate for GDPR compliance and user data deletion
 class gdpr_deactivate(generics.DestroyAPIView):
-    """View to handle user deletion for GDPR compliance."""
     queryset = User.objects.all()
     serializer_class = UsersSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsContributor, IsAuthorOrReadOnly]
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()

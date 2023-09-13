@@ -2,7 +2,6 @@
 from django.contrib.auth.models import User
 from API_IssueTrackingSystem.models import Project, Contributor, Issue, Comment
 from rest_framework.permissions import BasePermission
-from rest_framework import permissions
 
 class IsContributor(BasePermission):
     message = "The user is not a contributor of the project."
@@ -35,16 +34,3 @@ class IsAuthorOrReadOnly(BasePermission):
         if request.method in ['PUT', 'PATCH', 'DELETE']:
             return obj.author == request.user
         return True
-
-class IsAuthorOrReadOnly(permissions.BasePermission):
-    """
-    Custom permission to only allow authors of a project to edit it.
-    """
-    
-    def has_object_permission(self, request, view, obj):
-        # Read permissions are allowed for any request
-        if request.method in permissions.SAFE_METHODS:
-            return True
-        
-        # Only the author of the project can edit
-        return obj.author == request.user
