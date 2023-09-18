@@ -13,7 +13,7 @@ class ProjectViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return Project.objects.filter(contributors__user=self.request.user).distinct()
+        return Project.objects.filter(contributor__user=self.request.user).distinct()
 
     def perform_create(self, serializer):
         if Project.objects.filter(title=serializer.validated_data['title']).exists():
@@ -26,7 +26,7 @@ class ContributorViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated, IsContributor, IsAuthorOrReadOnly]
 
     def get_queryset(self):
-        return Contributor.objects.select_related('project', 'user').filter(project__contributors__user=self.request.user)
+        return Contributor.objects.select_related('project', 'user').filter(project__contributor__user=self.request.user)
 
     def perform_create(self, serializer):
         user = serializer.validated_data['user']
@@ -43,13 +43,13 @@ class IssueViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated, IsContributor, IsAuthorOrReadOnly]
 
     def get_queryset(self):
-        return Issue.objects.select_related('project', 'assigned_to').filter(project__contributors__user=self.request.user)
+        return Issue.objects.select_related('project', 'assigned_to').filter(project__contributor__user=self.request.user)
 
     def perform_create(self, serializer):
         project_id = self.request.data.get('project')
         
         # Validate that the project specified exists and current user has access to it
-        if not Project.objects.filter(id=project_id, contributors__user=self.request.user).exists():
+        if not Project.objects.filter(id=project_id, contributor__user=self.request.user).exists():
             raise exceptions.ValidationError("The specified project does not exist or you do not have access to it.")
         
         # Validate that the issue title is unique for the given project
@@ -71,7 +71,7 @@ class CommentViewSet(ModelViewSet):
     serializer_class = CommentSerializer
 
     def get_queryset(self):
-        return Comment.objects.select_related('issue').filter(issue__project__contributors__user=self.request.user)
+        return Comment.objects.select_related('issue').filter(issue__project__contributor__user=self.request.user)
 
     def perform_create(self, serializer):
         comment = serializer.validated_data.get('description', '').strip()
