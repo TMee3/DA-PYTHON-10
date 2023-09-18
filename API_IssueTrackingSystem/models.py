@@ -2,10 +2,11 @@ from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import User
 
-User.add_to_class('can_be_contacted', models.BooleanField(default=False))
-User.add_to_class('can_data_be_shared', models.BooleanField(default=False))
-User.add_to_class('birth_date', models.DateField(null=True, blank=True))
-
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    can_be_contacted = models.BooleanField(default=False)
+    can_data_be_shared = models.BooleanField(default=False)
+    birth_date = models.DateField(null=True, blank=True)
 
 class Project(models.Model):
     """Model representing a project."""
@@ -18,7 +19,6 @@ class Project(models.Model):
     def __str__(self):
         return self.title
 
-
 class Contributor(models.Model):
     """Model representing a contributor of a project."""
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -28,7 +28,6 @@ class Contributor(models.Model):
 
     class Meta:
         unique_together = ('project', 'user')
-
 
 class Issue(models.Model):
     """Model representing an issue related to a project."""
@@ -47,7 +46,6 @@ class Issue(models.Model):
 
     def __str__(self):
         return self.title
-
 
 class Comment(models.Model):
     """Model representing a comment on an issue."""
