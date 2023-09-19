@@ -1,14 +1,14 @@
 from django.conf import settings
 from django.db import models
 
-
-# Constants for choices
+# Choix prédéfinis pour les priorités des tâches
 PRIORITY_CHOICES = [
     ('faible', 'faible'),
     ('moyenne', 'moyenne'),
     ('élevé', 'élevé')
 ]
 
+# Choix prédéfinis pour les types de projets
 PROJECT_TYPE_CHOICES = [
     ('back_end', 'back_end'),
     ('front_end', 'front_end'),
@@ -16,32 +16,35 @@ PROJECT_TYPE_CHOICES = [
     ('Android', 'Android')
 ]
 
+# Choix prédéfinis pour les rôles des contributeurs
 CONTRIBUTOR_ROLE_CHOICES = [
     ('auteur', 'auteur'),
     ('collaborateur', 'collaborateur')
 ]
 
+# Choix prédéfinis pour les étiquettes des tâches
 ISSUE_TAG_CHOICES = [
     ('bug', 'bug'),
     ('amélioration', 'amélioration'),
     ('tâche', 'tâche')
 ]
 
+# Choix prédéfinis pour les statuts des tâches
 ISSUE_STATUS_CHOICES = [
-    ('en attende', 'en attende'),
+    ('en attente', 'en attente'),
     ('en cours', 'en cours'),
     ('terminé', 'terminé')
 ]
 
 class UserProfile(models.Model):
-    """Model representing user's additional profile information."""
+    """Modèle représentant les informations de profil supplémentaires d'un utilisateur."""
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     can_be_contacted = models.BooleanField(default=False)
     can_data_be_shared = models.BooleanField(default=False)
     birth_date = models.DateField(null=True, blank=True)
 
 class Project(models.Model):
-    """Model representing a project."""
+    """Modèle représentant un projet."""
     title = models.CharField(max_length=50)
     description = models.TextField()
     type = models.CharField(max_length=50, choices=PROJECT_TYPE_CHOICES)
@@ -51,7 +54,7 @@ class Project(models.Model):
         return self.title
 
 class Contributor(models.Model):
-    """Model representing a contributor of a project."""
+    """Modèle représentant un contributeur d'un projet."""
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     role = models.CharField(max_length=50, choices=CONTRIBUTOR_ROLE_CHOICES)
@@ -60,7 +63,7 @@ class Contributor(models.Model):
         unique_together = ('project', 'user')
 
 class Issue(models.Model):
-    """Model representing an issue related to a project."""
+    """Modèle représentant un problème lié à un projet."""
     title = models.CharField(max_length=50)
     description = models.TextField()
     tag = models.CharField(max_length=50, choices=ISSUE_TAG_CHOICES)
@@ -75,7 +78,7 @@ class Issue(models.Model):
         return self.title
 
 class Comment(models.Model):
-    """Model representing a comment on an issue."""
+    """Modèle représentant un commentaire sur un problème."""
     description = models.TextField()
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     issue = models.ForeignKey(Issue, on_delete=models.CASCADE)

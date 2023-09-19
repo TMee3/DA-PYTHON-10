@@ -2,10 +2,10 @@ from API_IssueTrackingSystem.models import Project, Contributor, Comment, Issue
 from rest_framework.permissions import BasePermission, SAFE_METHODS
 
 class IsContributor(BasePermission):
-    message = "The user is not a contributor of the project or does not have the required profile settings."
+    message = "L'utilisateur n'est pas un contributeur du projet ou n'a pas les paramètres de profil requis."
 
     def _get_project_id(self, obj):
-        # Get project id based on the type of the object
+        # Obtenir l'identifiant du projet en fonction du type d'objet
         if isinstance(obj, Comment):
             return obj.issue.project.id
         elif isinstance(obj, Issue):
@@ -17,26 +17,26 @@ class IsContributor(BasePermission):
         return None
 
     def has_object_permission(self, request, view, obj):
-        # Check if the user is authenticated
+        # Vérifier si l'utilisateur est authentifié
         if not request.user.is_authenticated:
             return False      
         
-        # Get the project_id from the object
+        # Obtenir l'identifiant du projet depuis l'objet
         project_id = self._get_project_id(obj)
         if not project_id:
             return False
 
-        # Check if the user is a contributor for the project
+        # Vérifier si l'utilisateur est un contributeur du projet
         return Contributor.objects.filter(user=request.user, project_id=project_id).exists()
 
 class IsAuthorOrReadOnly(BasePermission):
-    # Custom permission to only allow authors of a project to edit it
+    # Permission personnalisée pour autoriser uniquement les auteurs d'un projet à le modifier
     def has_object_permission(self, request, view, obj):
-        # Read permissions are allowed for any request
+        # Les permissions de lecture sont autorisées pour toutes les requêtes GET, HEAD et OPTIONS (SAFE_METHODS)
         if request.method in SAFE_METHODS:
             return True
         
-        # Write permissions are determined based on the object type
+        # Les permissions d'écriture sont déterminées en fonction du type d'objet
         if isinstance(obj, Project):
             return obj.author == request.user
         elif isinstance(obj, Issue):
@@ -45,4 +45,4 @@ class IsAuthorOrReadOnly(BasePermission):
             return obj.author == request.user
         elif isinstance(obj, Contributor):
             return obj.user == request.user
-        return False  # Default case if obj type isn't handled
+        return False  # Cas par défaut si le type d'objet n'est pas géré

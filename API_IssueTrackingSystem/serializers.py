@@ -1,9 +1,7 @@
 from rest_framework import serializers
 from API_IssueTrackingSystem.models import Project, Contributor, Issue, Comment, UserProfile
-
 from django.utils import timezone
 from django.contrib.auth.models import User
-
 
 # Sérialiseur de base pour les tâches (issues)
 class IssueSerializer(serializers.ModelSerializer):
@@ -28,7 +26,7 @@ class IssueSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Une tâche avec ce titre existe déjà pour ce projet.")
         return data
     
-    # validate that the assigned user is a contributor or owner of the project and show only contributors and owners
+    # Valider que l'utilisateur assigné est un contributeur ou un propriétaire du projet et afficher uniquement les contributeurs et les propriétaires
     def validate_assigned_to(self, value):
         project = self.context['request'].data.get('project')
         if project:
@@ -39,8 +37,6 @@ class IssueSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Le projet doit être spécifié.")
         return value
 
-    
-    
 # Sérialiseur de base pour les commentaires
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
@@ -50,7 +46,7 @@ class CommentSerializer(serializers.ModelSerializer):
             'author': {'read_only': True}
         }
     
-    # show only issues that the user has access to
+    # Afficher uniquement les tâches auxquelles l'utilisateur a accès
     def get_fields(self):
         fields = super(CommentSerializer, self).get_fields()
         fields['issue'].queryset = Issue.objects.filter(project__contributor__user=self.context['request'].user)
@@ -132,10 +128,9 @@ class ContributorSerializer(serializers.ModelSerializer):
             'user': {'required': True},
             'project': {'required': True}
             }
-        # show only projects that the user has access to and users that are not already contributors
+        # Afficher uniquement les projets auxquels l'utilisateur a accès et les utilisateurs qui ne sont pas déjà contributeurs
         def get_fields(self):
             fields = super(ContributorSerializer, self).get_fields()
             fields['project'].queryset = Project.objects.filter(contributor__user=self.context['request'].user)
             fields['user'].queryset = User.objects.exclude(contributor__project=fields['project'])
             return fields
-        
