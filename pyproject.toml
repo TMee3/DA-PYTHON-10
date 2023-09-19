@@ -15,6 +15,17 @@ pillow = "^10.0.0"
 python-dateutil = "^2.8.2"
 django-rest-framework-nested = "^0.0.1"
 
+[tool.poetry.group.dev.dependencies]
+flake8 = "^6.1.0"
+flake8-html = "^0.4.3"
+
+[tool.flake8]
+exclude = "env/"
+max-line-length = 119
+format = "html"
+htmldir = "flake-report"
+
+
 
 [build-system]
 requires = ["poetry-core"]
