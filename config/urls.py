@@ -10,7 +10,7 @@ from API_IssueTrackingSystem.views import ProjectViewSet, ContributorViewSet, Is
 router = routers.DefaultRouter()
 router.register('projects', ProjectViewSet, basename='project')
 router.register('issues', IssueViewSet, basename='issue')
-router.register('users', ContributorViewSet, basename='contributor')
+router.register('contributor', ContributorViewSet, basename='contributor')
 router.register('comments', CommentViewSet, basename='comment')
 
 router.register('projects', ProjectViewSet, basename='project')
