@@ -127,10 +127,11 @@ class ContributorSerializer(serializers.ModelSerializer):
             'role': {'required': True},
             'user': {'required': True},
             'project': {'required': True}
-            }
-        # Afficher uniquement les projets auxquels l'utilisateur a accès et les utilisateurs qui ne sont pas déjà contributeurs
-        def get_fields(self):
-            fields = super(ContributorSerializer, self).get_fields()
-            fields['project'].queryset = Project.objects.filter(contributor__user=self.context['request'].user)
-            fields['user'].queryset = User.objects.exclude(contributor__project=fields['project'])
-            return fields
+        }
+
+    # Afficher uniquement les projets auxquels l'utilisateur a accès et les utilisateurs qui ne sont pas déjà contributeurs
+    def get_fields(self):
+        fields = super(ContributorSerializer, self).get_fields()
+        fields['project'].queryset = Project.objects.filter(contributor__user=self.context['request'].user)
+        fields['user'].queryset = User.objects.exclude(contributor__project=fields['project'])
+        return fields
