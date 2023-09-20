@@ -36,7 +36,7 @@ urlpatterns = [
     path('api/token/refresh/', TokenRefreshView.as_view(), name='refresh_tokens'),
     path('', include(router.urls)),
     path('user_data/', user_data_viewset, name='user_data'),
-    path('user_data/export/', user_data_export_view, name='user_data_export'),
+    path('user_data/export_data/', user_data_export_view, name='user_data_export'),
     path('user_data/forget_me/', user_data_viewset, name='forget_me')
     
     
