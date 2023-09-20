@@ -133,5 +133,5 @@ class ContributorSerializer(serializers.ModelSerializer):
     def get_fields(self):
         fields = super(ContributorSerializer, self).get_fields()
         fields['project'].queryset = Project.objects.filter(contributor__user=self.context['request'].user)
-        fields['user'].queryset = User.objects.exclude(contributor__project=fields['project'])
+        fields['user'].queryset = User.objects.exclude(contributor__project__contributor__user=self.context['request'].user)
         return fields
