@@ -36,12 +36,6 @@ ISSUE_STATUS_CHOICES = [
     ('terminé', 'terminé')
 ]
 
-class UserProfile(models.Model):
-    """Modèle représentant les informations de profil supplémentaires d'un utilisateur."""
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    can_be_contacted = models.BooleanField(default=False)
-    can_data_be_shared = models.BooleanField(default=False)
-    birth_date = models.DateField(null=True, blank=True)
 
 class Project(models.Model):
     """Modèle représentant un projet."""

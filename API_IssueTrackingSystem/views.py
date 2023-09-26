@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from django.http import JsonResponse
 from rest_framework.decorators import action
 from .models import Project, Contributor, Issue, Comment
-from .serializers import ProjectSerializer, ContributorSerializer, IssueSerializer, CommentSerializer, UsersSerializer
+from .serializers import ProjectSerializer, ContributorSerializer, IssueSerializer, CommentSerializer
 from .permissions import IsContributor, IsAuthorOrReadOnly
 
 # VueSet pour les opérations CRUD sur le modèle Project
@@ -104,42 +104,3 @@ class CommentViewSet(viewsets.ModelViewSet):
             raise exceptions.ValidationError("Le commentaire ne peut pas être vide.")
         serializer.save(author=self.request.user)
 
-# VueSet pour la création d'utilisateurs
-class UserViewSet(generics.CreateAPIView):
-    queryset = User.objects.all()
-    serializer_class = UsersSerializer
-
-# VueSet pour les droits RGPD de l'utilisateur
-class UserDataViewSet(viewsets.ViewSet):
-    permission_classes = [IsAuthenticated]
-
-    def retrieve(self, request):
-        """Récupérer les données de l'utilisateur."""
-        user_data = {
-            "username": request.user.username,
-            "email": request.user.email,
-            "projets": [project.title for project in Project.objects.filter(contributor__user=request.user)],
-            "problèmes": [issue.title for issue in Issue.objects.filter(project__contributor__user=request.user)],
-            "commentaires": [comment.description for comment in Comment.objects.filter(issue__project__contributor__user=request.user)],
-            "contributeurs": [contributor.user.username for contributor in Contributor.objects.filter(project__contributor__user=request.user)]
-        }
-        return Response(user_data)
-
-    @action(detail=False, methods=['GET'])
-    def export_data(self, request):
-        """Exporter les données de l'utilisateur au format JSON."""
-        user_data = {
-            "username": request.user.username,
-            "email": request.user.email,
-            "projets": [project.title for project in Project.objects.filter(contributor__user=request.user)],
-            "problèmes": [issue.title for issue in Issue.objects.filter(project__contributor__user=request.user)],
-            "commentaires": [comment.description for comment in Comment.objects.filter(issue__project__contributor__user=request.user)],
-            "contributeurs": [contributor.user.username for contributor in Contributor.objects.filter(project__contributor__user=request.user)]
-        }
-        return JsonResponse(user_data)
-
-    @action(detail=False, methods=['DELETE'])
-    def forget_me(self, request):
-        """Supprimer l'utilisateur et toutes les données associées."""
-        request.user.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
