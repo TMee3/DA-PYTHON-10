@@ -150,3 +150,5 @@ PASSWORD_HASHERS = [
     'django.contrib.auth.hashers.BCryptPasswordHasher',
 ]
 
+AUTH_USER_MODEL = 'users.User'
+

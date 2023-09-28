@@ -1,10 +1,5 @@
-from rest_framework import generics, exceptions, viewsets
+from rest_framework import exceptions, viewsets
 from rest_framework.permissions import IsAuthenticated
-from django.contrib.auth.models import User
-from rest_framework import status
-from rest_framework.response import Response
-from django.http import JsonResponse
-from rest_framework.decorators import action
 from .models import Project, Contributor, Issue, Comment
 from .serializers import ProjectSerializer, ContributorSerializer, IssueSerializer, CommentSerializer
 from .permissions import IsContributor, IsAuthorOrReadOnly
@@ -103,4 +98,3 @@ class CommentViewSet(viewsets.ModelViewSet):
         if not comment:
             raise exceptions.ValidationError("Le commentaire ne peut pas être vide.")
         serializer.save(author=self.request.user)
-

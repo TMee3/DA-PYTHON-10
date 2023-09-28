@@ -13,7 +13,6 @@ router.register('issues', IssueViewSet, basename='issue')
 router.register('contributor', ContributorViewSet, basename='contributor')
 router.register('comments', CommentViewSet, basename='comment')
 
-router.register('projects', ProjectViewSet, basename='project')
 
 urlpatterns = [
     path('admin/', admin.site.urls),

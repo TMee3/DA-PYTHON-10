@@ -1,4 +1,3 @@
-from django.contrib.auth.models import User
 from rest_framework import generics, viewsets, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -6,11 +5,12 @@ from rest_framework.decorators import action
 from API_IssueTrackingSystem.models import Project, Contributor, Issue, Comment
 from API_IssueTrackingSystem.serializers import ProjectSerializer, ContributorSerializer, IssueSerializer, CommentSerializer
 from .serializers import UsersSerializer
+from django.contrib.auth import get_user_model
 
 
 # VueSet pour la création d'utilisateurs
 class UserViewSet(generics.CreateAPIView):
-    queryset = User.objects.all()
+    queryset = get_user_model().objects.all()
     serializer_class = UsersSerializer
 
 # VueSet pour les droits RGPD de l'utilisateur

@@ -1,7 +1,8 @@
 from rest_framework import serializers
 from API_IssueTrackingSystem.models import Project, Contributor, Issue, Comment
 from django.utils import timezone
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
+
 
 
 # Sérialiseur de base pour les tâches (issues)
@@ -86,5 +87,5 @@ class ContributorSerializer(serializers.ModelSerializer):
     def get_fields(self):
         fields = super(ContributorSerializer, self).get_fields()
         fields['project'].queryset = Project.objects.filter(contributor__user=self.context['request'].user)
-        fields['user'].queryset = User.objects.exclude(contributor__project__contributor__user=self.context['request'].user)
+        fields['user'].queryset = get_user_model().objects.exclude(contributor__project__contributor__user=self.context['request'].user)
         return fields

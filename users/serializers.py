@@ -1,12 +1,11 @@
-from django.contrib.auth.models import User
 from rest_framework import serializers
-from users.models import UserProfile
 from django.utils import timezone
+from django.contrib.auth import get_user_model
 
 # Sérialiseur pour le profil utilisateur avec validation de l'âge
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
-        model = UserProfile
+        model = get_user_model()
         fields = ('can_be_contacted', 'can_data_be_shared', 'birth_date')
 
     def validate_birth_date(self, value):
@@ -24,27 +23,27 @@ class UsersSerializer(serializers.ModelSerializer):
     user_profile = UserProfileSerializer(required=False)
 
     class Meta:
-        model = User
+        model = get_user_model()
         fields = ('id', 'username', 'email', 'password', 'user_profile')
         extra_kwargs = {
             'password': {'write_only': True, 'required': True}
         }
 
     def validate_username(self, value):
-        if User.objects.filter(username=value).exists():
+        if get_user_model().objects.filter(username=value).exists():
             raise serializers.ValidationError("Ce nom d'utilisateur existe déjà.")
         return value
 
     def create(self, validated_data):
         user_profile_data = validated_data.pop('user_profile', {})
-        user = User.objects.create(
+        user = get_user_model().objects.create(
             username=validated_data['username'],
             email=validated_data['email']
         )
         user.set_password(validated_data['password'])
         user.save()
 
-        UserProfile.objects.create(user=user, **user_profile_data)
+        get_user_model().objects.create(user=user, **user_profile_data)
         return user
 
     def validate_password(self, value):
